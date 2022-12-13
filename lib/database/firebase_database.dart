@@ -9,50 +9,18 @@ class FirebaseDatabase implements INoSQLDatabase {
   }
 
   @override
-  Future<void> createContractorPublication(Map<String, dynamic> data) async {
-    await _collection.add({
-      "username": data["username"],
-      "user_type": data["user_type"],
-      "description": data["description"],
-      "email": data["email"],
-      "user_description": data["user_description"],
-    });
+  Future<void> create(Object? object) async {
+    await _collection.add(object);
   }
 
   @override
-  Future<void> createServiceProviderPublication(
-      Map<String, dynamic> data) async {
-    await _collection.add({
-      "username": data["username"],
-      "user_type": data["user_type"],
-      "description": data["description"],
-      "phone": data["phone"],
-      "email": data["email"],
-      "user_description": data["user_description"],
-    });
-  }
+  Future<List<QueryDocumentSnapshot<Object?>>> find(
+      String key, String where) async {
+    QuerySnapshot querySnapshot =
+        await _collection.where(key, isEqualTo: where).get();
 
-  @override
-  Future<List<QueryDocumentSnapshot<Object?>>>
-      findContractorsPublications() async {
-    QuerySnapshot querySnapshot = await _collection.get();
+    final data = querySnapshot.docs.toList();
 
-    final contractorsPublications = querySnapshot.docs
-        .where((element) => element["user_type"] == "contratante")
-        .toList();
-
-    return contractorsPublications;
-  }
-
-  @override
-  Future<List<QueryDocumentSnapshot<Object?>>>
-      findServiceProvidersPublications() async {
-    QuerySnapshot querySnapshot = await _collection.get();
-
-    final serviceProvidersPublications = querySnapshot.docs
-        .where((element) => element["user_type"] == "prestador de serviço")
-        .toList();
-
-    return serviceProvidersPublications;
+    return data;
   }
 }

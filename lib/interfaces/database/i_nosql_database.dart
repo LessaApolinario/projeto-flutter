@@ -1,5 +1,5 @@
-import 'package:contratado/interfaces/database/mixins/i_publication_creator_database.dart';
-import 'package:contratado/interfaces/database/mixins/i_publication_searcher_database.dart';
+abstract class INoSQLDatabase {
+  Future<void> create(Object? object);
 
-abstract class INoSQLDatabase
-    with IPublicationCreatorDatabase, IPublicationSearcherDatabase {}
+  Future<List> find(String key, String where);
+}
